@@ -16,8 +16,8 @@ public class mazeOutputTests {
 		Maze m = new Maze( mazeName);
 		m.outputMaze(mazeName);
 		
-		File file1 = new File(mazeName+".txt");
-		File file2 = new File(mazeName+".out");
+		File file1 = new File("./mazefile/"+mazeName+".txt");
+		File file2 = new File("./solution/"+mazeName+".out");
 		assert(FileUtils.contentEquals(file1, file2));		
 		
 	}
@@ -28,8 +28,8 @@ public class mazeOutputTests {
 		Maze m = new Maze( mazeName);
 		m.outputMaze(mazeName);
 		
-		File file1 = new File(mazeName+".txt");
-		File file2 = new File(mazeName+".out");
+		File file1 = new File("./mazefile/"+mazeName+".txt");
+		File file2 = new File("./solution/"+mazeName+".out");
 		assert(FileUtils.contentEquals(file1, file2));		
 		
 	}
@@ -40,8 +40,8 @@ public class mazeOutputTests {
 		Maze m = new Maze( mazeName);
 		m.outputMaze(mazeName);
 		
-		File file1 = new File(mazeName+".txt");
-		File file2 = new File(mazeName+".out");
+		File file1 = new File("./mazefile/"+mazeName+".txt");
+		File file2 = new File("./solution/"+mazeName+".out");
 		assert(FileUtils.contentEquals(file1, file2));		
 		
 	}
@@ -52,8 +52,8 @@ public class mazeOutputTests {
 		Maze m = new Maze( mazeName);
 		m.outputMaze(mazeName);
 		
-		File file1 = new File(mazeName+".txt");
-		File file2 = new File(mazeName+".out");
+		File file1 = new File("./mazefile/"+mazeName+".txt");
+		File file2 = new File("./solution/"+mazeName+".out");
 		assert(FileUtils.contentEquals(file1, file2));			
 	}
 	
@@ -63,8 +63,8 @@ public class mazeOutputTests {
 		Maze m = new Maze( mazeName);
 		m.outputMaze(mazeName);
 		
-		File file1 = new File(mazeName+".txt");
-		File file2 = new File(mazeName+".out");
+		File file1 = new File("./mazefile/"+mazeName+".txt");
+		File file2 = new File("./solution/"+mazeName+".out");
 		assert(FileUtils.contentEquals(file1, file2));			
 	}
 
@@ -74,8 +74,8 @@ public class mazeOutputTests {
 		Maze m = new Maze( mazeName);
 		m.outputMaze(mazeName);
 		
-		File file1 = new File(mazeName+".txt");
-		File file2 = new File(mazeName+".out");
+		File file1 = new File("./mazefile/"+mazeName+".txt");
+		File file2 = new File("./solution/"+mazeName+".out");
 		assert(FileUtils.contentEquals(file1, file2));			
 	}
 	
@@ -85,8 +85,8 @@ public class mazeOutputTests {
 		Maze m = new Maze( mazeName);
 		m.outputMaze(mazeName);
 		
-		File file1 = new File(mazeName+".txt");
-		File file2 = new File(mazeName+".out");
+		File file1 = new File("./mazefile/"+mazeName+".txt");
+		File file2 = new File("./solution/"+mazeName+".out");
 		assert(FileUtils.contentEquals(file1, file2));			
 	}
 

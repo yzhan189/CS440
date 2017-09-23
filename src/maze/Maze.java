@@ -58,7 +58,7 @@ public class Maze {
 		
 		maze = new Node[100][100];
 		
-		String filePath = mazeName+".txt";
+		String filePath = "./mazefile/"+mazeName+".txt";
 		
 		int row = 0;
 		int col = 0;
@@ -136,7 +136,7 @@ public class Maze {
 	 * @param newfileName, the output file name */
 	public void outputMaze(String mazeName) throws IOException {
 		
-		String filePath = mazeName+".out";
+		String filePath = "./solution/"+mazeName+".out";
 	    File file = new File(filePath);
 	    
 
