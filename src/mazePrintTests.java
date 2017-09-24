@@ -19,6 +19,7 @@ public class mazePrintTests {
 		if(print) m.printMaze();
 		assert(m.getHeight()==9);
 		assert(m.getWidth()==10);
+		assert(m.getDotsNum()==12);
 	}
 	
 	@Test
@@ -38,6 +39,7 @@ public class mazePrintTests {
 //		System.out.println("\""+m.maze[19][38].type+"\"");
 		assert(m.getHeight()==20);
 		assert(m.getWidth()==37); 
+		assert(m.getDotsNum()==1);
 	}	
 	
 	
