@@ -12,6 +12,8 @@ public class Node {
 	
 	int row;
 	int col;
+
+	public int h;
 	
 	/* 
 	 * "%" for wall
@@ -48,6 +50,13 @@ public class Node {
 		this.row = row;
 		this.col = col;
 		this.type = type;
+	}
+	/* For priority queue test*/
+	public Node(int row, int col, char type, int h) {		
+		this.row = row;
+		this.col = col;
+		this.type = type;
+		this.h = h;
 	}
 	/* Use ONLY to store solution*/
 	protected void setType(char c) { type=c; }

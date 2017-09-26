@@ -24,13 +24,13 @@ public class Maze {
 	int width;
 	int height;
 	
-
+	int dotsNum = 0;
 	
 
 	public Node getRoot() { return root; }
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
-
+	public int getDotsNum() { return dotsNum;}
 	
 	
 	
@@ -94,10 +94,10 @@ public class Maze {
             		
             		/* set root to the starting point*/
             		if (ch=='P') {
-            			// if(root==null) out.println("root not setup");
-         			          			
-            			root = maze[row][col]; 
-            			
+            			// if(root==null) out.println("root not setup");       			          			
+            			root = maze[row][col];           			
+            		}else if (ch=='.') {
+            			dotsNum++;
             		}
          //   		out.print(maze[row][col].type);          		
             		col++;  
