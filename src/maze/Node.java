@@ -14,14 +14,14 @@ public class Node {
 	int col;
 
 	public int h;
-	
+
 	/* 
 	 * "%" for wall
 	 * " " for route
 	 * "." for dot
 	 * "P" for starting point (the root)
 	 * */
-	char type;
+	public char type;
 	
 	Node n,s,e,w;
 
@@ -52,7 +52,7 @@ public class Node {
 		this.type = type;
 	}
 	/* For priority queue test*/
-	public Node(int row, int col, char type, int h) {		
+	public Node(int row, int col, char type, int h) {
 		this.row = row;
 		this.col = col;
 		this.type = type;

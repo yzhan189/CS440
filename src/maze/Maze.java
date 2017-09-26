@@ -94,8 +94,8 @@ public class Maze {
             		
             		/* set root to the starting point*/
             		if (ch=='P') {
-            			// if(root==null) out.println("root not setup");       			          			
-            			root = maze[row][col];           			
+            			// if(root==null) out.println("root not setup");
+            			root = maze[row][col];
             		}else if (ch=='.') {
             			dotsNum++;
             		}

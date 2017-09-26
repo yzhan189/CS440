@@ -66,8 +66,9 @@ public class part1 {
 
     public static void main(String[] args){
         try {
-            Maze m = new Maze("openMaze");
+            Maze m = new Maze("mediumMaze");
             String solution = dfs(m.getRoot());
+            System.out.println(solution.length());
             Node node = m.getRoot();
             while(!solution.isEmpty()){
                 if(solution.charAt(0)=='n'){
