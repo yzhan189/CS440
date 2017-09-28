@@ -1,5 +1,6 @@
 package maze;
 
+import java.util.Comparator;
 
 /* 
  * Each node represents a square in maze.
@@ -8,37 +9,38 @@ package maze;
  * */
 
 
-public class Node {
+public class Node implements Comparable<Node>{
 	
 	int row;
 	int col;
-
 	public int h;
-
 	/* 
 	 * "%" for wall
 	 * " " for route
 	 * "." for dot
 	 * "P" for starting point (the root)
 	 * */
-	public char type;
+	char type;
 	
 	Node n,s,e,w;
 
 	/* These are public getter functions.*/
 	
-	public Node getNorth() {	return n; }
-	public Node getSouth() {	return s; }
-	public Node getWest() {	return w; }
-	public Node getEast() {	return e; }
+	public Node getNorth(){return n;}
+	public Node getSouth(){return s;}
+	public Node getWest(){return w;}
+	public Node getEast(){return e;}
 	
-	public int getRow() { return row; }
-	public int getCol() { return col; }
+	public int getRow(){return row;}
+	public int getCol(){return col;}
+	public char getType(){return type;}
 	
-	public char getType() { return type; }
-
-	
-	
+	@Override
+    public int compareTo(Node y){
+        if (this.h < y.h) return -1;
+        if (this.h > y.h) return 1;
+        return 0;
+    }
 	
 	/* ===============================================
 	 * Following codes are for private implementation
@@ -51,14 +53,7 @@ public class Node {
 		this.col = col;
 		this.type = type;
 	}
-	/* For priority queue test*/
-	public Node(int row, int col, char type, int h) {
-		this.row = row;
-		this.col = col;
-		this.type = type;
-		this.h = h;
-	}
 	/* Use ONLY to store solution*/
-	protected void setType(char c) { type=c; }
+	public void setType(char c) { type=c; }
 	
 }
