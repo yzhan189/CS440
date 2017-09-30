@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import heuristic.Dist;
+import searches.part1;
 
 /* 
  * The maze object is stored in a linked list.
@@ -30,14 +31,14 @@ public class Maze {
 	
 	int dotsNum = 0;
 	
-	int heuristic;
+//	int heuristic;
 
 	public Node getRoot() { return root; }
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
 	public int getDotsNum() { return dotsNum;}
-	public int getHeuristic() { return heuristic;}
-	public void setHeuristic(int h) { heuristic=h; }
+//	public int getHeuristic() { return heuristic;}
+//	public void setHeuristic(int h) { heuristic=h; }
 	
 	/* public using */
 	public Vector<Node> goals;
@@ -151,25 +152,54 @@ public class Maze {
 	}
 	
 	/* adj matrix, used by MST*/
-	public int[][] constructAdjMatrix(Vector<Node> remainGoals) {
+	public int[][] constructAdjMatrix(Vector<Node> remainGoals, char mode) {
 		int remainNum = remainGoals.size();
 		int[][] ret = new int[remainNum][remainNum];
-		for (int i=0; i<remainNum; i++) {
-			for (int j=0; j<remainNum; j++) {
-				if(i<j) {
-					ret[i][j] = Dist.mahatton(
-							remainGoals.get(i), remainGoals.get(j));
-				}else if(i>j){
-					ret[i][j] = ret[j][i];
-				}else {
-					ret[i][j] = 0;
+		
+		if (mode=='m') {
+			for (int i=0; i<remainNum; i++) {
+				for (int j=0; j<remainNum; j++) {
+					if(i<j) {
+						ret[i][j] = Dist.mahatton(remainGoals.get(i),
+								remainGoals.get(j));
+					}else if(i>j){
+						ret[i][j] = ret[j][i];
+					}else {
+						ret[i][j] = 0;
+					}
+				}
+			}
+			
+			
+		}else if(mode=='a'){
+			for (int i=0; i<remainNum; i++) {
+				for (int j=0; j<remainNum; j++) {
+					if(i<j) {
+						part1.setH(this); //somehow not redo?
+						ret[i][j] = Dist.aStar(remainGoals.get(i), 
+								remainGoals.get(j));					
+					}else if(i>j){
+						ret[i][j] = ret[j][i];
+					}else {
+						ret[i][j] = 0;
+					}
 				}
 			}
 		}
 		
+
+		
 		return ret;
 	}
 		
+    
+    
+	
+	
+	
+	
+	
+	
 	/* write the maze into output file
 	 * @param newfileName, the output file name */
 	public void outputMaze(String mazeName) throws IOException {
