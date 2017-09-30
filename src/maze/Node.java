@@ -42,8 +42,6 @@ public class Node implements Comparable<Node>{
         return 0;
     }
 	
-
-	
 	/* ===============================================
 	 * Following codes are for private implementation
 	 * DO NOT USE
@@ -57,9 +55,5 @@ public class Node implements Comparable<Node>{
 	}
 	/* Use ONLY to store solution*/
 	public void setType(char c) { type=c; }
-	
-	public void printNode() {
-		System.out.println("row: "+row+" "+"col: "+col);
-	}
-	
+
 }
