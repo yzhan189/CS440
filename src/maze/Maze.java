@@ -7,6 +7,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Vector;
+
+import heuristic.Dist;
 
 /* 
  * The maze object is stored in a linked list.
@@ -26,13 +30,17 @@ public class Maze {
 	
 	int dotsNum = 0;
 	
+	int heuristic;
 
 	public Node getRoot() { return root; }
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
 	public int getDotsNum() { return dotsNum;}
+	public int getHeuristic() { return heuristic;}
+	public void setHeuristic(int h) { heuristic=h; }
 	
-	
+	/* public using */
+	public Vector<Node> goals;
 	
 	
 	
@@ -58,6 +66,8 @@ public class Maze {
 		
 		maze = new Node[100][100];
 		
+		goals = new Vector<Node>();
+		
 		String filePath = "./mazefile/"+mazeName+".txt";
 		
 		int row = 0;
@@ -67,9 +77,11 @@ public class Maze {
         FileReader inputStream = null;
 
         
+        
         try {
             inputStream = new FileReader(filePath);
             int c;
+            Node temp;
             while ((c = inputStream.read()) != -1) {
             		/* my codes here!*/
             		char ch = (char) c;
@@ -89,14 +101,16 @@ public class Maze {
             			col = 0;
             			continue;
             		}
-            		maze[row][col] = new Node(row,col,ch);
+            		temp = new Node(row,col,ch);
+            		maze[row][col] = temp;
           //  		out.print(maze[row][col].type);
             		
             		/* set root to the starting point*/
             		if (ch=='P') {
             			// if(root==null) out.println("root not setup");
-            			root = maze[row][col];
+            			root = temp;
             		}else if (ch=='.') {
+            			goals.add(temp);
             			dotsNum++;
             		}
          //   		out.print(maze[row][col].type);          		
@@ -130,6 +144,30 @@ public class Maze {
 			}
 			out.println();
 		}
+        Iterator<Node> it = goals.iterator();
+        while(it.hasNext()){
+            it.next().printNode();
+        }
+	}
+	
+	/* adj matrix, used by MST*/
+	public int[][] constructAdjMatrix(Vector<Node> remainGoals) {
+		int remainNum = remainGoals.size();
+		int[][] ret = new int[remainNum][remainNum];
+		for (int i=0; i<remainNum; i++) {
+			for (int j=0; j<remainNum; j++) {
+				if(i<j) {
+					ret[i][j] = Dist.mahatton(
+							remainGoals.get(i), remainGoals.get(j));
+				}else if(i>j){
+					ret[i][j] = ret[j][i];
+				}else {
+					ret[i][j] = 0;
+				}
+			}
+		}
+		
+		return ret;
 	}
 		
 	/* write the maze into output file
