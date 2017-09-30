@@ -17,7 +17,7 @@ public class nodeTests {
 		assert(n.getSouth()==null);
 		assert(n.getEast()==null);
 		assert(n.getWest()==null);
-		
+		n.printNode();
 	}
 
 }

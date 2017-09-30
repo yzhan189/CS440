@@ -93,7 +93,7 @@ public class part1 {
     }
 
     public static String ass(Node root){
-    	Comparator<APair> comparator = new APairComparator();
+    		Comparator<APair> comparator = new APairComparator();
         PriorityQueue<APair<Node, String>> queue = new PriorityQueue<APair<Node, String>>(2000, comparator);//PriorityQueue<Pair<Node, String>>();
 
         Set<Node> visited = new HashSet<>();

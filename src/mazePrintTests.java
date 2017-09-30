@@ -11,7 +11,7 @@ import maze.Maze;
 
 public class mazePrintTests {
 
-	boolean print = false;
+	boolean print = true;
 
 	@Test
 	public void printTinySearch() throws IOException {
@@ -19,9 +19,16 @@ public class mazePrintTests {
 		if(print) m.printMaze();
 		assert(m.getHeight()==9);
 		assert(m.getWidth()==10);
+//		int[][] ret = m.constructAdjMatrix(m.goals.,'m');
+//		for (int i=0; i<m.goals.size(); i++) {
+//			for (int j=0; j<m.goals.size(); j++) {
+//				System.out.print(ret[i][j]+" ");
+//			}
+//			System.out.println(" ");
+//		}
 	}
 
-	@Test
+	//@Test
 	public void printMediumMaze() throws IOException {
 		Maze m = new Maze("mediumMaze");
 		if(print) m.printMaze();
@@ -29,7 +36,7 @@ public class mazePrintTests {
 		assert(m.getWidth()==61);
 	}
 
-	@Test
+	//@Test
 	public void printOpenMaze() throws IOException {
 		Maze m = new Maze("openMaze");
 		if(print) m.printMaze();
@@ -41,7 +48,7 @@ public class mazePrintTests {
 	}
 
 
-	@Test
+	//@Test
 	public void printBigDots() throws IOException {
 		Maze m = new Maze("bigDots");
 		if(print) m.printMaze();
