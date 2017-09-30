@@ -32,13 +32,13 @@ import java.io.*;
 
 public class MST
 {
-	public static int MSTValue(Vector<Node> remainGoals, Maze maze, char mode) {
+	public static int MSTValue(Set<Node> remainGoals, Maze maze, char mode) {
 		int[][] graph = maze.constructAdjMatrix(remainGoals,mode);
 		MST t = new MST(remainGoals.size());
 		return t.sumMST(graph);
 	}
 	
-	 public int closetGoalDistance(Vector<Node> remainGoals,Node currentPosition) {
+	 public int closetGoalDistance(Set<Node> remainGoals,Node currentPosition) {
 		 // stores the closet distance between current position and one of the goal
 		 int min = Integer.MAX_VALUE;
 		 int temp;
