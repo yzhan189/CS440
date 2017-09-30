@@ -1,6 +1,8 @@
 package searches;
 
-public class Pair <T, K> {
+import maze.Node;
+
+public class Pair <T, K> implements Comparable<Pair<T, K>> {
 
     private final T left;
     private final K right;
@@ -22,4 +24,10 @@ public class Pair <T, K> {
         }
 
 
+    @Override
+    public int compareTo(Pair<T, K> o) {
+        State s1 = (State) this.left;
+        State s2 = (State) this.left;
+        return s1.h+((String)this.right).length()-(s2.h+((String)o.right).length());
+    }
 }
