@@ -56,4 +56,7 @@ public class Node implements Comparable<Node>{
 	/* Use ONLY to store solution*/
 	public void setType(char c) { type=c; }
 
+	public void printNode() {
+		System.out.println("row: "+row+" "+"col: "+col);
+	}
 }
