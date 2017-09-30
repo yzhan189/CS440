@@ -157,18 +157,15 @@ public class Maze {
 		int remainNum = remainGoals.size();
 		int[][] ret = new int[remainNum][remainNum];
 		
-		Iterator<Node> it = remainGoals.iterator();
-		Iterator<Node> jt = remainGoals.iterator();
 		int i = 0;
 		int j = 0;
-		
+		System.out.println("the size of matrix is "+remainNum);
 		if (mode=='m') {
 	 
-			 while(it.hasNext()) {	 
-				 while(jt.hasNext()) {
-					 
+			 for(Node inode:remainGoals) {	 				 
+				 for(Node jnode:remainGoals) {
 						if(i<j) {
-							ret[i][j] = Dist.mahatton(it.next(), jt.next());
+							ret[i][j] = Dist.mahatton(inode, jnode);
 						}else if(i>j){
 							ret[i][j] = ret[j][i];
 						}else {
@@ -177,16 +174,16 @@ public class Maze {
 						j++;
 				 }
 				 i++;
+				 j = 0;
 			 }
 
 			
 			
 		}else if(mode=='a'){
-			 while(it.hasNext()) {	 
-				 while(jt.hasNext()) {
-					 
+			 for(Node inode:remainGoals) {	 				 
+				 for(Node jnode:remainGoals) {
 						if(i<j) {
-							ret[i][j] = Dist.aStar(it.next(), jt.next());
+							ret[i][j] = Dist.aStar(inode, jnode);
 						}else if(i>j){
 							ret[i][j] = ret[j][i];
 						}else {
@@ -195,6 +192,7 @@ public class Maze {
 						j++;
 				 }
 				 i++;
+				 j = 0;
 			 }
 		}
 		
