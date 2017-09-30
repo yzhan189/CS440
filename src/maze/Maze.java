@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import heuristic.Dist;
@@ -152,39 +153,49 @@ public class Maze {
 	}
 	
 	/* adj matrix, used by MST*/
-	public int[][] constructAdjMatrix(Vector<Node> remainGoals, char mode) {
+	public int[][] constructAdjMatrix(Set<Node> remainGoals, char mode) {
 		int remainNum = remainGoals.size();
 		int[][] ret = new int[remainNum][remainNum];
 		
+		Iterator<Node> it = remainGoals.iterator();
+		Iterator<Node> jt = remainGoals.iterator();
+		int i = 0;
+		int j = 0;
+		
 		if (mode=='m') {
-			for (int i=0; i<remainNum; i++) {
-				for (int j=0; j<remainNum; j++) {
-					if(i<j) {
-						ret[i][j] = Dist.mahatton(remainGoals.get(i),
-								remainGoals.get(j));
-					}else if(i>j){
-						ret[i][j] = ret[j][i];
-					}else {
-						ret[i][j] = 0;
-					}
-				}
-			}
+	 
+			 while(it.hasNext()) {	 
+				 while(jt.hasNext()) {
+					 
+						if(i<j) {
+							ret[i][j] = Dist.mahatton(it.next(), jt.next());
+						}else if(i>j){
+							ret[i][j] = ret[j][i];
+						}else {
+							ret[i][j] = 0;
+						}
+						j++;
+				 }
+				 i++;
+			 }
+
 			
 			
 		}else if(mode=='a'){
-			for (int i=0; i<remainNum; i++) {
-				for (int j=0; j<remainNum; j++) {
-					if(i<j) {
-						part1.setH(this); //somehow not redo?
-						ret[i][j] = Dist.aStar(remainGoals.get(i), 
-								remainGoals.get(j));					
-					}else if(i>j){
-						ret[i][j] = ret[j][i];
-					}else {
-						ret[i][j] = 0;
-					}
-				}
-			}
+			 while(it.hasNext()) {	 
+				 while(jt.hasNext()) {
+					 
+						if(i<j) {
+							ret[i][j] = Dist.aStar(it.next(), jt.next());
+						}else if(i>j){
+							ret[i][j] = ret[j][i];
+						}else {
+							ret[i][j] = 0;
+						}
+						j++;
+				 }
+				 i++;
+			 }
 		}
 		
 
