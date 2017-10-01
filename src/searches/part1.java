@@ -9,47 +9,17 @@ import java.util.*;
 import static heuristic.MST.*;
 
 public class part1 {
-//
-//    public static String bfs12(Node root, int dotNum){
-//        Queue<Pair<Node, String>> queue = new LinkedList<>();
-//
-//        queue.add(new Pair<>(root,"P", new HashSet<>()));
-//
-//        while(true){
-//
-//            Pair<Node, String> current = queue.poll();
-//            Node node = current.getLeft();
-//            String steps = current.getRight();
-//            Set<Node> n = current.getN();
-////            System.out.println( steps);
-//            if(node.getType()=='.' && !n.contains(node)){
-//                n.add(node);
-//                if(n.size()==dotNum)
-//                    return steps;
-//            }
-//            if(node.getType()!='%') {
-//                    queue.add(new Pair<>(node.getNorth(), steps+"n", new HashSet<>(n)));
-//                if(steps.charAt(steps.length()-1) != 'n')
-//                    queue.add(new Pair<>(node.getSouth(), steps+"s", new HashSet<>(n)));
-//                if(steps.charAt(steps.length()-1) != 'e')
-//                    queue.add(new Pair<>(node.getWest(), steps+"w", new HashSet<>(n)));
-//                if(steps.charAt(steps.length()-1) != 'w')
-//                    queue.add(new Pair<>(node.getEast(), steps+"e", new HashSet<>(n)));
-//            }
-//
-//        }
-//    }
 
-    public static String bfs(Node root){
-        Queue<Pair<Node, String>> queue = new LinkedList<>();
+    public static String bfs(Node root, Set<Node> goalNodes){
+        Queue<Pair<State, String>> queue = new LinkedList<>();
 
         Set<Node> visited = new HashSet<>();
 
-        queue.add(new Pair<>(root,""));
+        queue.add(new Pair<>(new State(root, goalNodes, 0),""));
 
         while(!queue.isEmpty()){
-            Pair<Node, String> current = queue.poll();
-            Node node = current.getLeft();
+            Pair<State, String> current = queue.poll();
+            Node node = current.getLeft().currentPosition;
             String steps = current.getRight();
             if(visited.contains(node)){
                 continue;
@@ -58,39 +28,39 @@ public class part1 {
                 return steps;
             }
             if(node.getType() ==' ' || node.getType()=='P') {
-                visited.add(current.getLeft());
-                queue.add(new Pair<>(node.getNorth(), steps+"n"));
-                queue.add(new Pair<>(node.getSouth(), steps+"s"));
-                queue.add(new Pair<>(node.getWest(), steps+"w"));
-                queue.add(new Pair<>(node.getEast(), steps+"e"));
+                visited.add(current.getLeft().currentPosition);
+                queue.add(new Pair<>(new State(node.getNorth(), goalNodes, 0), steps+"n"));
+                queue.add(new Pair<>(new State(node.getSouth(), goalNodes, 0), steps+"s"));
+                queue.add(new Pair<>(new State(node.getWest(), goalNodes, 0), steps+"w"));
+                queue.add(new Pair<>(new State(node.getEast(), goalNodes, 0), steps+"e"));
             }
         }
         return "";
     }
 
-    public static String dfs(Node root){
-        Stack<Pair<Node, String>> stack = new Stack<>();
+    public static String dfs(Node root, Set<Node> goalNodes){
+        Stack<Pair<State, String>> stack = new Stack<>();
 
         Set<Node> visited = new HashSet<>();
-        stack.add(new Pair<>(root,""));
 
-        while(!stack.isEmpty()) {
-            Pair<Node, String> current = stack.pop();
-            Node node = current.getLeft();
+        stack.add(new Pair<>(new State(root, goalNodes, 0),""));
+
+        while(!stack.isEmpty()){
+            Pair<State, String> current = stack.pop();
+            Node node = current.getLeft().currentPosition;
             String steps = current.getRight();
             if(visited.contains(node)){
                 continue;
             }
-            if (node.getType() == '.') {
+            if(node.getType()=='.'){
                 return steps;
             }
-
             if(node.getType() ==' ' || node.getType()=='P') {
-                visited.add(current.getLeft());
-                stack.push(new Pair<>(node.getNorth(), steps+"n"));
-                stack.push(new Pair<>(node.getSouth(), steps+"s"));
-                stack.push(new Pair<>(node.getWest(), steps+"w"));
-                stack.push(new Pair<>(node.getEast(), steps+"e"));
+                visited.add(current.getLeft().currentPosition);
+                stack.push(new Pair<>(new State(node.getNorth(), goalNodes, 0), steps+"n"));
+                stack.push(new Pair<>(new State(node.getSouth(), goalNodes, 0), steps+"s"));
+                stack.push(new Pair<>(new State(node.getWest(), goalNodes, 0), steps+"w"));
+                stack.push(new Pair<>(new State(node.getEast(), goalNodes, 0), steps+"e"));
             }
         }
         return "";
@@ -179,7 +149,7 @@ public class part1 {
 
     public static String ass12(Node root, Set<Node> goalNodes, Maze m){
         Comparator<Pair> comparator = new PairComparator();
-        PriorityQueue<Pair<State, String>> queue = new PriorityQueue<>(2000, comparator);//PriorityQueue<Pair<Node, String>>();
+        PriorityQueue<Pair<State, String>> queue = new PriorityQueue<>(2000, comparator);
 
         Set<State> explored = new HashSet<>();
         
@@ -194,7 +164,7 @@ public class part1 {
         while(!queue.isEmpty()){
         	
         		/*===change====*/
-        		boolean updateMST = true;
+        		boolean updateMST = false;
     	
         	
             Pair<State, String> current = queue.poll();
@@ -227,37 +197,25 @@ public class part1 {
 //            System.out.println(steps);
 
             explored.add(state);
-            
-            if(updateMST) { // update
-            		int nextMST = MSTValue(goals,m,'m');
-                if(currentNode.getNorth().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getNorth(),  new HashSet<>(goals),getH12(currentNode.getNorth(), goals, nextMST),nextMST), steps + "n"));
-                }
-                if(currentNode.getSouth().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getSouth(),  new HashSet<>(goals),getH12(currentNode.getSouth(), goals, nextMST),nextMST), steps + "s"));
-                }
-                if(currentNode.getEast().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getEast(),  new HashSet<>(goals),getH12(currentNode.getEast(), goals, nextMST),nextMST), steps + "e"));
-                }
-                if(currentNode.getWest().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getWest(),  new HashSet<>(goals),getH12(currentNode.getWest(), goals, nextMST),nextMST), steps + "w"));
-                }
-            }else {// no need to recalculate mst, use this state instead.
-            	
-                if(currentNode.getNorth().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getNorth(),  new HashSet<>(goals),getH12(currentNode.getNorth(), goals, MST_from_this_state),MST_from_this_state), steps + "n"));
-                    
-                }
-                if(currentNode.getSouth().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getSouth(),  new HashSet<>(goals),getH12(currentNode.getSouth(), goals, MST_from_this_state),MST_from_this_state), steps + "s"));
-                }
-                if(currentNode.getEast().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getEast(),  new HashSet<>(goals),getH12(currentNode.getEast(), goals, MST_from_this_state),MST_from_this_state), steps + "e"));
-                }
-                if(currentNode.getWest().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getWest(),  new HashSet<>(goals),getH12(currentNode.getWest(), goals, MST_from_this_state),MST_from_this_state), steps + "w"));
-                }
+
+            int MST_val = MST_from_this_state;
+            if(updateMST){
+                MST_val = MSTValue(goals,m,'m');
             }
+
+            if(currentNode.getNorth().getType()!='%') {
+                queue.add(new Pair<>(new State(currentNode.getNorth(), new HashSet<>(goals),getH12(currentNode.getNorth(), goals, MST_val),MST_val),steps + "n"));
+            }
+            if(currentNode.getSouth().getType()!='%') {
+                queue.add(new Pair<>(new State(currentNode.getSouth(),  new HashSet<>(goals),getH12(currentNode.getSouth(), goals, MST_val),MST_val), steps + "s"));
+            }
+            if(currentNode.getEast().getType()!='%') {
+                queue.add(new Pair<>(new State(currentNode.getEast(),  new HashSet<>(goals),getH12(currentNode.getEast(), goals, MST_val),MST_val), steps + "e"));
+            }
+            if(currentNode.getWest().getType()!='%') {
+                queue.add(new Pair<>(new State(currentNode.getWest(),  new HashSet<>(goals),getH12(currentNode.getWest(), goals, MST_val),MST_val), steps + "w"));
+            }
+
 
         }
         return "";
@@ -313,9 +271,9 @@ public class part1 {
     public static void main(String[] args){
     	
     	long start_time = System.currentTimeMillis();
-    	
+
     	try {
-            Maze m = new Maze("smallSearch");
+            Maze m = new Maze("tinySearch");
             String solution =ass12(m.getRoot(), getGoalNodes(m), m);
             Node node = m.getRoot();
             System.out.println("Cost: " + solution.length());
@@ -348,11 +306,11 @@ public class part1 {
             System.out.print("Oops something wrong with Maze constructor");
             return;
         }
-    	
+
     		long end_time = System.currentTimeMillis();
     		double difference = (end_time - start_time) / 1e3;
     		System.out.println("Time elapsed: "+difference+" s");
-
+//
 //        Comparator<Pair> comparator = new PairComparator();
 //        PriorityQueue<Pair<State, String>> queue = new PriorityQueue<>(2000, comparator);
 //        queue.add(new Pair<State, String>(new State(null, null, 5), ""));
