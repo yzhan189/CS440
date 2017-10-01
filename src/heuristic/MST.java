@@ -38,13 +38,15 @@ public class MST
 		return t.sumMST(graph);
 	}
 	
-	 public int closetGoalDistance(Set<Node> remainGoals,Node currentPosition) {
+	 public static int closetGoalDistance(Set<Node> remainGoals,Node currentPosition) {
 		 // stores the closet distance between current position and one of the goal
+		 if(currentPosition.getType()=='.') return 0;
+		 
 		 int min = Integer.MAX_VALUE;
 		 int temp;
 		 Iterator<Node> it = remainGoals.iterator();
 		 while(it.hasNext()) {
-			 temp = Dist.aStar(it.next(),currentPosition);
+			 temp = Dist.mahatton(it.next(),currentPosition);
 			 if (temp<min) min = temp;
 		 }
 
@@ -139,7 +141,7 @@ public class MST
      // print the constructed MST
      // printMST(parent, V, graph);
      
-     System.out.println("sum ");
+     //System.out.println("sum ");
      int sum = 0;
      for (int i = 1; i < V; i++)
         sum += graph[i][parent[i]];
