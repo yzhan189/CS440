@@ -9,11 +9,20 @@ public class State{
     public Node currentPosition;
     public Set<Node> goalNodes;
     public int h;
+    
+    /*======changes=======*/
+    public int mst;
 
     public State(Node currentPosition, Set<Node> goalNodes, int h) {
         this.currentPosition = currentPosition;
         this.goalNodes = goalNodes;
         this.h=h;
+    }
+    public State(Node currentPosition, Set<Node> goalNodes, int h, int mst) {
+        this.currentPosition = currentPosition;
+        this.goalNodes = goalNodes;
+        this.h=h;
+        this.mst = mst;
     }
 
     @Override

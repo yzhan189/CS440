@@ -6,7 +6,7 @@ import maze.Node;
 import java.io.IOException;
 import java.util.*;
 
-import static heuristic.MST.MSTValue;
+import static heuristic.MST.*;
 
 public class part1 {
 //
@@ -182,10 +182,21 @@ public class part1 {
         PriorityQueue<Pair<State, String>> queue = new PriorityQueue<>(2000, comparator);//PriorityQueue<Pair<Node, String>>();
 
         Set<State> explored = new HashSet<>();
-        queue.add(new Pair<>(new State(root, goalNodes, getH12(root, goalNodes, m)),""));
+        
+        
+        /*===change====*/
+        int MST_from_this_state = MSTValue(goalNodes,m,'m');
+        
+        // add the root node											/*===change====*/
+        queue.add(new Pair<>(new State(root, goalNodes, getH12(root, goalNodes, MST_from_this_state),MST_from_this_state),""));
         int count=0;
+        
         while(!queue.isEmpty()){
-
+        	
+        		/*===change====*/
+        		boolean updateMST = true;
+    	
+        	
             Pair<State, String> current = queue.poll();
             String steps = current.getRight();
             State state = current.getLeft();
@@ -194,11 +205,19 @@ public class part1 {
             Node currentNode = state.currentPosition;
             Set<Node> goals = state.goalNodes;
 
+            /*===change====*/
+            MST_from_this_state = state.mst;
+            
             if(explored.contains(state))
                 continue;
 
             if(goals.contains(currentNode)){
                 goals.remove(currentNode);
+                
+                /* reach a goal, set is changing, 
+                 * need to recalculate mst next state  */
+                updateMST = true;  
+                
                 if(goals.isEmpty()){
                     System.out.println(count);
                     return steps;
@@ -208,39 +227,47 @@ public class part1 {
 //            System.out.println(steps);
 
             explored.add(state);
-            if(currentNode.getNorth().getType()!='%') {
-                queue.add(new Pair<>(new State(currentNode.getNorth(),  new HashSet<>(goals),getH12(currentNode.getNorth(), goals, m)), steps + "n"));
+            
+            if(updateMST) { // update
+            		int nextMST = MSTValue(goals,m,'m');
+                if(currentNode.getNorth().getType()!='%') {
+                    queue.add(new Pair<>(new State(currentNode.getNorth(),  new HashSet<>(goals),getH12(currentNode.getNorth(), goals, nextMST),nextMST), steps + "n"));
+                }
+                if(currentNode.getSouth().getType()!='%') {
+                    queue.add(new Pair<>(new State(currentNode.getSouth(),  new HashSet<>(goals),getH12(currentNode.getSouth(), goals, nextMST),nextMST), steps + "s"));
+                }
+                if(currentNode.getEast().getType()!='%') {
+                    queue.add(new Pair<>(new State(currentNode.getEast(),  new HashSet<>(goals),getH12(currentNode.getEast(), goals, nextMST),nextMST), steps + "e"));
+                }
+                if(currentNode.getWest().getType()!='%') {
+                    queue.add(new Pair<>(new State(currentNode.getWest(),  new HashSet<>(goals),getH12(currentNode.getWest(), goals, nextMST),nextMST), steps + "w"));
+                }
+            }else {// no need to recalculate mst, use this state instead.
+            	
+                if(currentNode.getNorth().getType()!='%') {
+                    queue.add(new Pair<>(new State(currentNode.getNorth(),  new HashSet<>(goals),getH12(currentNode.getNorth(), goals, MST_from_this_state),MST_from_this_state), steps + "n"));
+                    
+                }
+                if(currentNode.getSouth().getType()!='%') {
+                    queue.add(new Pair<>(new State(currentNode.getSouth(),  new HashSet<>(goals),getH12(currentNode.getSouth(), goals, MST_from_this_state),MST_from_this_state), steps + "s"));
+                }
+                if(currentNode.getEast().getType()!='%') {
+                    queue.add(new Pair<>(new State(currentNode.getEast(),  new HashSet<>(goals),getH12(currentNode.getEast(), goals, MST_from_this_state),MST_from_this_state), steps + "e"));
+                }
+                if(currentNode.getWest().getType()!='%') {
+                    queue.add(new Pair<>(new State(currentNode.getWest(),  new HashSet<>(goals),getH12(currentNode.getWest(), goals, MST_from_this_state),MST_from_this_state), steps + "w"));
+                }
             }
-            if(currentNode.getSouth().getType()!='%') {
-                queue.add(new Pair<>(new State(currentNode.getSouth(),  new HashSet<>(goals),getH12(currentNode.getSouth(), goals, m)), steps + "s"));
-            }
-            if(currentNode.getEast().getType()!='%') {
-                queue.add(new Pair<>(new State(currentNode.getEast(),  new HashSet<>(goals),getH12(currentNode.getEast(), goals, m)), steps + "e"));
-            }
-            if(currentNode.getWest().getType()!='%') {
-                queue.add(new Pair<>(new State(currentNode.getWest(),  new HashSet<>(goals),getH12(currentNode.getWest(), goals, m)), steps + "w"));
-            }
+
         }
         return "";
     }
+    
 
-    public static int getH12(Node currentNode, Set<Node> goalNodes, Maze m){
-//        ArrayList<Integer> dis = new ArrayList<>();
-//        for(Node goal: goalNodes){
-//            dis.add(bfs12(currentNode, goal).length());
-//        }
-//        return dis.stream().reduce(Integer::max).orElse(100);
-
-//        ArrayList<Double> mat = new ArrayList<>();
-//        int crow = currentNode.getRow();
-//        int ccol = currentNode.getCol();
-//        for(Node goal: goalNodes){
-//            mat.add(Math.sqrt(Math.pow(crow-goal.getRow(), 2) + Math.pow(ccol-goal.getCol(), 2)));
-//        }
-//        return mat.stream().reduce(Double::max).orElse(0.0).intValue();
-
-        return MSTValue(goalNodes,m, 'a')+ bfs(currentNode).length();
-    }
+    public static int getH12(Node currentNode, Set<Node> goalNodes, int mstValue){
+    		return mstValue+
+				closetGoalDistance( goalNodes, currentNode);
+  }
 
     public static String bfs12(Node root, Node goal){
         Queue<Pair<Node, String>> queue = new LinkedList<>();
@@ -284,8 +311,11 @@ public class part1 {
     }
     
     public static void main(String[] args){
+    	
+    	long start_time = System.currentTimeMillis();
+    	
     	try {
-            Maze m = new Maze("tinySearch");
+            Maze m = new Maze("smallSearch");
             String solution =ass12(m.getRoot(), getGoalNodes(m), m);
             Node node = m.getRoot();
             System.out.println("Cost: " + solution.length());
@@ -318,6 +348,10 @@ public class part1 {
             System.out.print("Oops something wrong with Maze constructor");
             return;
         }
+    	
+    		long end_time = System.currentTimeMillis();
+    		double difference = (end_time - start_time) / 1e3;
+    		System.out.println("Time elapsed: "+difference+" s");
 
 //        Comparator<Pair> comparator = new PairComparator();
 //        PriorityQueue<Pair<State, String>> queue = new PriorityQueue<>(2000, comparator);
