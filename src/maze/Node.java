@@ -14,6 +14,7 @@ public class Node implements Comparable<Node>{
 	int row;
 	int col;
 	public int h;
+
 	/* 
 	 * "%" for wall
 	 * " " for route

@@ -33,7 +33,7 @@ import java.io.*;
 public class MST
 {
 	public static int MSTValue(Set<Node> remainGoals, Maze maze, char mode) {
-		int[][] graph = maze.constructAdjMatrix(remainGoals,mode);
+		int[][] graph = maze.constructAdjMatrix(remainGoals,'a');
 		MST t = new MST(remainGoals.size());
 		return t.sumMST(graph);
 	}
@@ -46,7 +46,7 @@ public class MST
 		 int temp;
 		 Iterator<Node> it = remainGoals.iterator();
 		 while(it.hasNext()) {
-			 temp = Dist.mahatton(it.next(),currentPosition);
+			 temp = Dist.aStar(it.next(),currentPosition);
 			 if (temp<min) min = temp;
 		 }
 
