@@ -4,7 +4,7 @@ import maze.Node;
 
 import java.util.Set;
 
-public class State{
+public class State implements Comparable<State>{
 
     public Node currentPosition;
     public Set<Node> goalNodes;
@@ -32,5 +32,12 @@ public class State{
 
     public int hashCode() {
         return currentPosition.hashCode() ^ goalNodes.hashCode();
+    }
+    
+    @Override
+    public int compareTo(State y){
+        if (this.currentPosition.h < y.currentPosition.h) return -1;
+        if (this.currentPosition.h > y.currentPosition.h) return 1;
+        return 0;
     }
 }

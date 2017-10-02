@@ -27,8 +27,8 @@ public class GPair <T, K> implements Comparable<GPair<T, K>>{
 	@Override
 	public int compareTo(GPair<T, K> o1) {
 		// TODO Auto-generated method stub
-		Node n1 = (Node)this.left;
-		Node n2 = (Node)o1.left;
+		State n1 = (State)this.left;
+		State n2 = (State)o1.left;
 		//return n1.h+((String)this.right).length()-(n2.h+((String)o1.right).length());
 		return n1.compareTo(n2);
 	}

@@ -12,11 +12,8 @@ public class part1 {
 
     public static String bfs(Node root, Set<Node> goalNodes){
         Queue<Pair<State, String>> queue = new LinkedList<>();
-
         Set<Node> visited = new HashSet<>();
-
         queue.add(new Pair<>(new State(root, goalNodes, 0),""));
-
         while(!queue.isEmpty()){
             Pair<State, String> current = queue.poll();
             Node node = current.getLeft().currentPosition;
@@ -40,11 +37,8 @@ public class part1 {
 
     public static String dfs(Node root, Set<Node> goalNodes){
         Stack<Pair<State, String>> stack = new Stack<>();
-
         Set<Node> visited = new HashSet<>();
-
         stack.add(new Pair<>(new State(root, goalNodes, 0),""));
-
         while(!stack.isEmpty()){
             Pair<State, String> current = stack.pop();
             Node node = current.getLeft().currentPosition;
@@ -66,17 +60,14 @@ public class part1 {
         return "";
     }
 
-    public static String gbfs(Node root){
+    public static String gbfs(Node root, Set<Node> goalNodes){
     	Comparator<GPair> comparator = new GPairComparator();
-        PriorityQueue<GPair<Node, String>> queue = new PriorityQueue<GPair<Node, String>>(2000, comparator);//PriorityQueue<Pair<Node, String>>();
-
+        PriorityQueue<GPair<State, String>> queue = new PriorityQueue<GPair<State, String>>(2000, comparator);
         Set<Node> visited = new HashSet<>();
-
-        queue.add(new GPair<>(root,""));
-
+        queue.add(new GPair<>(new State(root, goalNodes, 0),""));
         while(!queue.isEmpty()){
-            GPair<Node, String> current = queue.poll();
-            Node node = current.getLeft();
+            GPair<State, String> current = queue.poll();
+            Node node = current.getLeft().currentPosition;
             String steps = current.getRight();
             if(visited.contains(node)){
                 continue;
@@ -85,27 +76,24 @@ public class part1 {
                 return steps;
             }
             if(node.getType() ==' ' || node.getType()=='P') {
-                visited.add(current.getLeft());
-                queue.add(new GPair<>(node.getNorth(), steps+"n"));
-                queue.add(new GPair<>(node.getSouth(), steps+"s"));
-                queue.add(new GPair<>(node.getWest(), steps+"w"));
-                queue.add(new GPair<>(node.getEast(), steps+"e"));
+                visited.add(current.getLeft().currentPosition);
+                queue.add(new GPair<>(new State(node.getNorth(), goalNodes, 0), steps+"n"));
+                queue.add(new GPair<>(new State(node.getSouth(), goalNodes, 0), steps+"s"));
+                queue.add(new GPair<>(new State(node.getWest(), goalNodes, 0), steps+"w"));
+                queue.add(new GPair<>(new State(node.getEast(), goalNodes, 0), steps+"e"));
             }
         }
         return "";
     }
 
-    public static String ass(Node root){
-    		Comparator<APair> comparator = new APairComparator();
-        PriorityQueue<APair<Node, String>> queue = new PriorityQueue<APair<Node, String>>(2000, comparator);//PriorityQueue<Pair<Node, String>>();
-
+    public static String ass(Node root, Set<Node> goalNodes){
+    	Comparator<APair> comparator = new APairComparator();
+        PriorityQueue<APair<State, String>> queue = new PriorityQueue<APair<State, String>>(2000, comparator);
         Set<Node> visited = new HashSet<>();
-
-        queue.add(new APair<>(root,""));
-
+        queue.add(new APair<>(new State(root, goalNodes, 0),""));
         while(!queue.isEmpty()){
-            APair<Node, String> current = queue.poll();
-            Node node = current.getLeft();
+            APair<State, String> current = queue.poll();
+            Node node = current.getLeft().currentPosition;
             String steps = current.getRight();
             if(visited.contains(node)){
                 continue;
@@ -114,11 +102,11 @@ public class part1 {
                 return steps;
             }
             if(node.getType() ==' ' || node.getType()=='P') {
-                visited.add(current.getLeft());
-                queue.add(new APair<>(node.getNorth(), steps+"n"));
-                queue.add(new APair<>(node.getSouth(), steps+"s"));
-                queue.add(new APair<>(node.getWest(), steps+"w"));
-                queue.add(new APair<>(node.getEast(), steps+"e"));
+                visited.add(current.getLeft().currentPosition);
+                queue.add(new APair<>(new State(node.getNorth(), goalNodes, 0), steps+"n"));
+                queue.add(new APair<>(new State(node.getSouth(), goalNodes, 0), steps+"s"));
+                queue.add(new APair<>(new State(node.getWest(), goalNodes, 0), steps+"w"));
+                queue.add(new APair<>(new State(node.getEast(), goalNodes, 0), steps+"e"));
             }
         }
         return "";
@@ -145,7 +133,6 @@ public class part1 {
 			}
 		}
 	}
-
 
     public static String ass12(Node root, Set<Node> goalNodes, Maze m){
         Comparator<Pair> comparator = new PairComparator();
@@ -221,7 +208,6 @@ public class part1 {
         return "";
     }
     
-
     public static int getH12(Node currentNode, Set<Node> goalNodes, int mstValue){
     		return mstValue+
 				closetGoalDistance( goalNodes, currentNode);
@@ -273,8 +259,12 @@ public class part1 {
     	long start_time = System.currentTimeMillis();
 
     	try {
-            Maze m = new Maze("tinySearch");
-            String solution =ass12(m.getRoot(), getGoalNodes(m), m);
+            //Maze m = new Maze("tinySearch");
+    		Maze m = new Maze("openMaze");
+    		setH(m);
+            //String solution =ass12(m.getRoot(), getGoalNodes(m), m);
+    		String solution =gbfs(m.getRoot(), getGoalNodes(m));
+    		//String solution = ass(m.getRoot(), getGoalNodes(m));
             Node node = m.getRoot();
             System.out.println("Cost: " + solution.length());
             System.out.println(solution);
