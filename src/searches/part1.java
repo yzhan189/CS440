@@ -145,10 +145,11 @@ public class part1 {
             }
             if(node.getType() ==' ' || node.getType()=='P') {
                 visited.add(current.getLeft());
-                queue.add(new APair<>(node.getNorth(), steps+"n"));
-                queue.add(new APair<>(node.getSouth(), steps+"s"));
                 queue.add(new APair<>(node.getWest(), steps+"w"));
+                queue.add(new APair<>(node.getSouth(), steps+"s"));
+                queue.add(new APair<>(node.getNorth(), steps+"n"));
                 queue.add(new APair<>(node.getEast(), steps+"e"));
+
             }
         }
         return "";
@@ -157,17 +158,7 @@ public class part1 {
     public static void setH(Maze inputMaze){
 		int height = inputMaze.getHeight();
 		int width = inputMaze.getWidth();
-		Node goalNode = null;
-		for (int i=0; i<height;i++){
-			for(int j=0;j<width;j++){
-				Node currentNode = inputMaze.getMazeSquare(i, j);
-				if(currentNode.getType() == '.'){
-					goalNode = currentNode;
-					break;
-				}
-			}
-			if(goalNode != null) break;
-		}
+		Node goalNode = inputMaze.goals.firstElement();
 		for (int i=0; i<height;i++){
 			for(int j=0;j<width;j++){
 				Node currentNode = inputMaze.getMazeSquare(i, j);
@@ -185,16 +176,16 @@ public class part1 {
         
         
         /*===change====*/
-        int MST_from_this_state = MSTValue(goalNodes,m,'m');
+        int MST_from_this_state = MSTValue(goalNodes,m,'a');
         
         // add the root node											/*===change====*/
         queue.add(new Pair<>(new State(root, goalNodes, getH12(root, goalNodes, MST_from_this_state),MST_from_this_state),""));
         int count=0;
-        
+        int reduced=0;
         while(!queue.isEmpty()){
         	
         		/*===change====*/
-        		boolean updateMST = true;
+        		boolean updateMST = false;
     	
         	
             Pair<State, String> current = queue.poll();
@@ -208,8 +199,10 @@ public class part1 {
             /*===change====*/
             MST_from_this_state = state.mst;
             
-            if(explored.contains(state))
-                continue;
+            if(explored.contains(state)) {
+            		continue;
+            }
+                
 
             if(goals.contains(currentNode)){
                 goals.remove(currentNode);
@@ -219,7 +212,8 @@ public class part1 {
                 updateMST = true;  
                 
                 if(goals.isEmpty()){
-                    System.out.println(count);
+                    System.out.println(count+" "+reduced);
+                    
                     return steps;
                 }
             }
@@ -227,35 +221,56 @@ public class part1 {
 //            System.out.println(steps);
 
             explored.add(state);
-            
+           
+            Node next;
             if(updateMST) { // update
-            		int nextMST = MSTValue(goals,m,'m');
-                if(currentNode.getNorth().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getNorth(),  new HashSet<>(goals),getH12(currentNode.getNorth(), goals, nextMST),nextMST), steps + "n"));
+            		int nextMST = MSTValue(goals,m,'a');
+            		next = currentNode.getNorth();
+                if(next.getType()!='%') {
+                    queue.add(new Pair<>(new State(next,  new HashSet<>(goals),getH12(next, goals, nextMST),nextMST), steps + "n"));
                 }
-                if(currentNode.getSouth().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getSouth(),  new HashSet<>(goals),getH12(currentNode.getSouth(), goals, nextMST),nextMST), steps + "s"));
+                next = currentNode.getSouth();
+                if(next.getType()!='%') {
+                    queue.add(new Pair<>(new State(next,  new HashSet<>(goals),getH12(next, goals, nextMST),nextMST), steps + "s"));
                 }
-                if(currentNode.getEast().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getEast(),  new HashSet<>(goals),getH12(currentNode.getEast(), goals, nextMST),nextMST), steps + "e"));
+                next = currentNode.getEast();
+                if(next.getType()!='%') {
+                    queue.add(new Pair<>(new State(next,  new HashSet<>(goals),getH12(next, goals, nextMST),nextMST), steps + "e"));
                 }
-                if(currentNode.getWest().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getWest(),  new HashSet<>(goals),getH12(currentNode.getWest(), goals, nextMST),nextMST), steps + "w"));
+                next = currentNode.getWest();
+                if(next.getType()!='%') {
+                    queue.add(new Pair<>(new State(next,  new HashSet<>(goals),getH12(next, goals, nextMST),nextMST), steps + "w"));
                 }
             }else {// no need to recalculate mst, use this state instead.
-            	
-                if(currentNode.getNorth().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getNorth(),  new HashSet<>(goals),getH12(currentNode.getNorth(), goals, MST_from_this_state),MST_from_this_state), steps + "n"));
+            		State newState;    
+            		
+        			next = currentNode.getNorth();		
+        			newState = new State ( next,  new HashSet<>(goals),getH12(next, goals, MST_from_this_state),MST_from_this_state);
+
+        			if(next.getType()!='%'&& (!explored.contains(newState)) ) {
+                    queue.add(new Pair<>(newState, steps + "n"));
                     
                 }
-                if(currentNode.getSouth().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getSouth(),  new HashSet<>(goals),getH12(currentNode.getSouth(), goals, MST_from_this_state),MST_from_this_state), steps + "s"));
+        			
+                next = currentNode.getSouth();
+    				newState = new State ( next,  new HashSet<>(goals),getH12(next, goals, MST_from_this_state),MST_from_this_state);
+
+    				if(next.getType()!='%') {
+                    queue.add(new Pair<>(newState, steps + "s"));
                 }
-                if(currentNode.getEast().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getEast(),  new HashSet<>(goals),getH12(currentNode.getEast(), goals, MST_from_this_state),MST_from_this_state), steps + "e"));
+    				
+                next = currentNode.getEast();
+    				newState = new State ( next,  new HashSet<>(goals),getH12(next, goals, MST_from_this_state),MST_from_this_state);
+
+                if(next.getType()!='%') {
+                    queue.add(new Pair<>(newState, steps + "e"));
                 }
-                if(currentNode.getWest().getType()!='%') {
-                    queue.add(new Pair<>(new State(currentNode.getWest(),  new HashSet<>(goals),getH12(currentNode.getWest(), goals, MST_from_this_state),MST_from_this_state), steps + "w"));
+                
+                next = currentNode.getWest();
+    				newState = new State ( next,  new HashSet<>(goals),getH12(next, goals, MST_from_this_state),MST_from_this_state);
+
+                if(next.getType()!='%'&& (!explored.contains(newState))) {
+                    queue.add(new Pair<>(newState, steps + "w"));
                 }
             }
 
@@ -265,8 +280,7 @@ public class part1 {
     
 
     public static int getH12(Node currentNode, Set<Node> goalNodes, int mstValue){
-    		return mstValue+
-				closetGoalDistance( goalNodes, currentNode);
+    		return mstValue+closetGoalDistance( goalNodes, currentNode);
   }
 
     public static String bfs12(Node root, Node goal){
@@ -315,8 +329,10 @@ public class part1 {
     	long start_time = System.currentTimeMillis();
     	
     	try {
-            Maze m = new Maze("smallSearch");
-            String solution =ass12(m.getRoot(), getGoalNodes(m), m);
+    		
+            Maze m = new Maze("mediumSearch");
+            
+            String solution =ass12(m.getRoot(),getGoalNodes(m),m);
             Node node = m.getRoot();
             System.out.println("Cost: " + solution.length());
             System.out.println(solution);

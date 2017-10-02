@@ -26,11 +26,11 @@ public class APair <T, K> implements Comparable<APair<T, K>>{
         }
 
 	@Override
-	public int compareTo(APair<T, K> o1) {
+	public int compareTo(APair<T, K> o2) {
 		// TODO Auto-generated method stub
 		Node n1 = (Node)this.left;
-		Node n2 = (Node)o1.left;
-		return n1.h+((String)this.right).length()-(n2.h+((String)o1.right).length());
+		Node n2 = (Node)o2.left;
+		return n1.h+((String)this.right).length()-(n2.h+((String)o2.right).length());
 		//return n1.compareTo(n2);
 	}
 
