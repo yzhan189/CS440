@@ -146,10 +146,10 @@ public class Maze {
 			}
 			out.println();
 		}
-        Iterator<Node> it = goals.iterator();
-        while(it.hasNext()){
-            it.next().printNode();
-        }
+//        Iterator<Node> it = goals.iterator();
+//        while(it.hasNext()){
+//            it.next().printNode();
+//        }
 	}
 	
 	/* adj matrix, used by MST*/
@@ -159,7 +159,7 @@ public class Maze {
 		
 		int i = 0;
 		int j = 0;
-		System.out.println("the size of matrix is "+remainNum);
+		//System.out.println("the size of matrix is "+remainNum);
 		if (mode=='m') {
 	 
 			 for(Node inode:remainGoals) {	 				 
