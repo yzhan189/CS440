@@ -1,8 +1,6 @@
 package maze;
 
-import java.util.Comparator;
-
-/* 
+/*
  * Each node represents a square in maze.
  * 
  * @variable type: the character printed.
@@ -42,13 +40,8 @@ public class Node implements Comparable<Node>{
         if (this.h > y.h) return 1;
         return 0;
     }
-	
-	/* ===============================================
-	 * Following codes are for private implementation
-	 * DO NOT USE
-	 * ===============================================
-	 * */
-	boolean isSet = false; // is pointer for this node is set up	
+
+	boolean isSet = false; // is pointer for this node set up
 	public Node(int row, int col, char type) {		
 		this.row = row;
 		this.col = col;

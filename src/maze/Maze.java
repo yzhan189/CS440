@@ -1,19 +1,15 @@
 package maze;
 import static java.lang.System.out;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
 import heuristic.Dist;
-import searches.part1;
-
 /* 
  * The maze object is stored in a linked list.
  * 
@@ -30,22 +26,16 @@ public class Maze {
 	int width;
 	int height;
 	
-	int dotsNum = 0;
-	
-//	int heuristic;
+	int dotsNum = 0;  //number of dots inside a maze
 
 	public Node getRoot() { return root; }
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
 	public int getDotsNum() { return dotsNum;}
-//	public int getHeuristic() { return heuristic;}
-//	public void setHeuristic(int h) { heuristic=h; }
-	
+
 	/* public using */
 	public Vector<Node> goals;
-	
-	
-	
+
 	/* ===============================================
 	 * Following codes are for private implementation
 	 * DO NOT USE
@@ -57,10 +47,9 @@ public class Maze {
 	/* Deal with unexpected \r character*/
 	boolean has_r = false;
 	
-	
 	public Maze() {}
 	
-	public Node getMazeSquare(int i, int j) { return maze[i][j]; }
+	public Node getMazeSquare(int i, int j) { return maze[i][j]; } //get node at a location
 	
 	/* Constructor: to construct a maze object according to maze file
 	 * @param fileName: the maze file*/
@@ -75,62 +64,50 @@ public class Maze {
 		int row = 0;
 		int col = 0;
 
-		
         FileReader inputStream = null;
 
-        
-        
         try {
             inputStream = new FileReader(filePath);
             int c;
             Node temp;
             while ((c = inputStream.read()) != -1) {
-            		/* my codes here!*/
-            		char ch = (char) c;
-            		
-            		/* Deal with unexpected \r character*/
-            		if (ch=='\r') {
-            			has_r = true;
-            			continue;
-            		} 
-            		
-            		/* read a new line then increment row number
-            		 * set col to beginning  
-            		 *         		 */            
-            		if (ch=='\n') {
-            			row++;
-            			if (width==0) width = col;
-            			col = 0;
-            			continue;
-            		}
-            		temp = new Node(row,col,ch);
-            		maze[row][col] = temp;
-          //  		out.print(maze[row][col].type);
-            		
-            		/* set root to the starting point*/
-            		if (ch=='P') {
-            			// if(root==null) out.println("root not setup");
-            			root = temp;
-            		}else if (ch=='.') {
-            			goals.add(temp);
-            			dotsNum++;
-            		}
-         //   		out.print(maze[row][col].type);          		
-            		col++;  
-            }   
+                char ch = (char) c;
+
+                /* Deal with unexpected \r character*/
+                if (ch=='\r') {
+                    has_r = true;
+                    continue;
+                }
+
+                /* read a new line then increment row number
+            	 * set col to beginning
+           		 */
+                if (ch=='\n') {
+                    row++;
+                    if (width==0) width = col;
+                    col = 0;
+                    continue;
+                }
+                temp = new Node(row,col,ch);
+                maze[row][col] = temp;
+
+                /* set root to the starting point*/
+                if (ch=='P') {
+                    // if(root==null) out.println("root not setup");
+                    root = temp;
+                }else if (ch=='.') {
+                    goals.add(temp);
+                    dotsNum++;
+                }
+                col++;
+            }
             
             height = row;
-            
- //           out.print(height);
- //           out.print(width);
-                                  
             setupPointer(root);
-            
         } finally {
             if (inputStream != null) {
                 inputStream.close();
             }
-
         }
 	
 	}
@@ -146,10 +123,6 @@ public class Maze {
 			}
 			out.println();
 		}
-//        Iterator<Node> it = goals.iterator();
-//        while(it.hasNext()){
-//            it.next().printNode();
-//        }
 	}
 	
 	/* adj matrix, used by MST*/
@@ -164,58 +137,44 @@ public class Maze {
 	 
 			 for(Node inode:remainGoals) {	 				 
 				 for(Node jnode:remainGoals) {
-						if(i<j) {
-							ret[i][j] = Dist.mahatton(inode, jnode);
-						}else if(i>j){
-							ret[i][j] = ret[j][i];
-						}else {
-							ret[i][j] = 0;
-						}
-						j++;
+					 if(i<j) {
+						 ret[i][j] = Dist.mahatton(inode, jnode);
+					 }else if(i>j){
+						 ret[i][j] = ret[j][i];
+					 }else {
+						 ret[i][j] = 0;
+					 }
+					 j++;
 				 }
 				 i++;
 				 j = 0;
 			 }
-
-			
-			
 		}else if(mode=='a'){
+
 			 for(Node inode:remainGoals) {	 				 
 				 for(Node jnode:remainGoals) {
-						if(i<j) {
-							ret[i][j] = Dist.aStar(inode, jnode);
-						}else if(i>j){
-							ret[i][j] = ret[j][i];
-						}else {
-							ret[i][j] = 0;
-						}
-						j++;
+					 if(i<j) {
+						 ret[i][j] = Dist.aStar(inode, jnode);
+					 }else if(i>j){
+						 ret[i][j] = ret[j][i];
+					 }else {
+						 ret[i][j] = 0;
+					 }
+					 j++;
 				 }
 				 i++;
 				 j = 0;
 			 }
 		}
-		
-
-		
 		return ret;
 	}
-		
-    
-    
-	
-	
-	
-	
-	
-	
+
 	/* write the maze into output file
 	 * @param newfileName, the output file name */
 	public void outputMaze(String mazeName) throws IOException {
 		
 		String filePath = "./solution/"+mazeName+".out";
 	    File file = new File(filePath);
-	    
 
 	    if( file.exists() ) { file.delete(); }
 	    
@@ -241,24 +200,18 @@ public class Maze {
 				}
 				
 				/* Deal with unexpected \r character*/
-				if (has_r) bw.write('\r');;
-				
+				if (has_r) bw.write('\r');
 				bw.write('\n');
 			}
 
 			System.out.println("Done"); 
 
 		} finally {
-
 			if (bw != null)
 				bw.close();
-			
 			if (fw != null)
 				fw.close();
-
-		} 
-	      
-	      
+		}
 	}
 	
 	/* set up NEWS pointer for each node recursively
@@ -283,11 +236,9 @@ public class Maze {
 		if (row+1<height) 
 			root.s = maze[row+1][col];
 		
-		setupPointer	(root.w);
+		setupPointer(root.w);
 		setupPointer(root.e);
 		setupPointer(root.n);
 		setupPointer(root.s);
 	}
-	
-
 }

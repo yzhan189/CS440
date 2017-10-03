@@ -27,7 +27,7 @@ public class Pair <T, K> implements Comparable<Pair<T, K>> {
     @Override
     public int compareTo(Pair<T, K> o) {
         State s1 = (State) this.left;
-        State s2 = (State) this.left;
+        State s2 = (State) o.left;
         return s1.h+((String)this.right).length()-(s2.h+((String)o.right).length());
     }
 }

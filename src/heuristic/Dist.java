@@ -6,8 +6,8 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import maze.Node;
-import searches.APair;
-import searches.APairComparator;
+import searches.Pair;
+import searches.PairComparator;
 
 public class Dist {
 	
@@ -17,15 +17,15 @@ public class Dist {
 	
 	/* find true distance between root and destination using A* */
 	public static int aStar(Node root, Node dest) {
-		Comparator<APair> comparator = new APairComparator();
-        PriorityQueue<APair<Node, String>> queue = new PriorityQueue<APair<Node, String>>(2000, comparator);//PriorityQueue<Pair<Node, String>>();
+		Comparator<Pair> comparator = new PairComparator();
+        PriorityQueue<Pair<Node, String>> queue = new PriorityQueue<Pair<Node, String>>(2000, comparator);//PriorityQueue<Pair<Node, String>>();
 
         Set<Node> visited = new HashSet<>();
 
-        queue.add(new APair<>(root,""));
+        queue.add(new Pair<>(root,""));
 
         while(!queue.isEmpty()){
-            APair<Node, String> current = queue.poll();
+            Pair<Node, String> current = queue.poll();
             Node node = current.getLeft();
             String steps = current.getRight();
             if(visited.contains(node)){
@@ -36,10 +36,10 @@ public class Dist {
             }
             if(node.getType() !='%' ) { // if not wall
                 visited.add(current.getLeft());
-                queue.add(new APair<>(node.getNorth(), steps+"n"));
-                queue.add(new APair<>(node.getSouth(), steps+"s"));
-                queue.add(new APair<>(node.getWest(), steps+"w"));
-                queue.add(new APair<>(node.getEast(), steps+"e"));
+                queue.add(new Pair<>(node.getNorth(), steps+"n"));
+                queue.add(new Pair<>(node.getSouth(), steps+"s"));
+                queue.add(new Pair<>(node.getWest(), steps+"w"));
+                queue.add(new Pair<>(node.getEast(), steps+"e"));
             }
         }
         return 0;

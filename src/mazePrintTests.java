@@ -1,8 +1,3 @@
-
-import static org.junit.Assert.*;
-
-import java.io.File;
-import org.apache.commons.io.FileUtils;
 import java.io.IOException;
 
 import org.junit.Test;
@@ -20,13 +15,6 @@ public class mazePrintTests {
 		if(print) m.printMaze();
 		assert(m.getHeight()==9);
 		assert(m.getWidth()==10);
-//		int[][] ret = m.constructAdjMatrix(m.goals.,'m');
-//		for (int i=0; i<m.goals.size(); i++) {
-//			for (int j=0; j<m.goals.size(); j++) {
-//				System.out.print(ret[i][j]+" ");
-//			}
-//			System.out.println(" ");
-//		}
 	}
 
 	//@Test

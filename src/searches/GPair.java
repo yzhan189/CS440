@@ -29,7 +29,6 @@ public class GPair <T, K> implements Comparable<GPair<T, K>>{
 		// TODO Auto-generated method stub
 		State n1 = (State)this.left;
 		State n2 = (State)o1.left;
-		//return n1.h+((String)this.right).length()-(n2.h+((String)o1.right).length());
 		return n1.compareTo(n2);
 	}
 
